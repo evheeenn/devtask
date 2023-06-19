@@ -191,7 +191,7 @@ export default function Form() {
             disabled={isSubmitting}
             sx={styles.button}
           >
-            Create Account-
+            Create Account
             
           </Button>
           <Typography sx={styles.forgotPassword}>

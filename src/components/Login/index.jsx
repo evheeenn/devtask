@@ -4,7 +4,7 @@ import Landing from "./components/Landing";
 import "./index.css";
 import FormBox from "./components/FormBox";
 
-export default function Registration() {
+export default function Login() {
   const styles = {
     main: {
       width: "100%",

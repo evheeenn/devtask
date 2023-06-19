@@ -4,10 +4,9 @@ import { useDispatch } from "react-redux";
 import { Formik } from "formik";
 import { TextField, Button, Typography } from "@mui/material";
 import {
+  addUserAction,
   getUsersForValidationThunk,
-  registrationThunk,
 } from "../../../../store/actions";
-import { User } from "../../../../classes/classes";
 import { useNavigate } from "react-router-dom";
 
 export default function Form() {
@@ -36,14 +35,14 @@ export default function Form() {
     forgotPassword: {
       fontSize: "14px",
       color: "#3F4BF2",
-      margin: "14px auto 0 auto",
+      margin: "17px auto 0 auto",
       cursor: "pointer",
     },
 
     createAccountButton: {
       width: "70%",
       height: "37px",
-      margin: "27px auto 0 auto",
+      margin: "23px auto 0 auto",
       color: "#3F4BF2",
     },
   };
@@ -58,48 +57,45 @@ export default function Form() {
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [emailErrorBullean, setEmailErrorBullean] = useState(false);
+  const [emailErrorBullean, setemailErrorBullean] = useState(false);
   const [passwordErrorBullean, setPasswordErrorBullean] = useState(false);
 
-  const submitRegistration = async (values, resetForm) => {
-    const userExist = userCheck.some((user) => user.email === values.email);
-    setEmailErrorBullean(false);
+  const submitValidation = (values, resetForm) => {
+    setemailErrorBullean(false);
     setPasswordErrorBullean(false);
-    if (userExist) {
-      setEmailError(`User with email ${values.email} already exists!`);
-      setEmailErrorBullean(true);
-    } else if (values.password !== values.verifyPassword) {
-      setPasswordError("Passwords does not match.");
-      setPasswordErrorBullean(true);
-    } else {
-      const newUser = new User(values.name, values.email, values.password);
-      await dispatch(registrationThunk(newUser));
-      resetForm();
+    let userExist = false;
+    userCheck.forEach((el) => {
+      if (el.email === values.email) {
+        userExist = true;
+        if (el.password === values.password) {
+          setemailErrorBullean(false);
+          setPasswordErrorBullean(false);
+          localStorage.setItem("user", JSON.stringify(el.id));
+          dispatch(addUserAction(el));
+          resetForm();
+        } else {
+          setPasswordErrorBullean(true);
+          setPasswordError("Invalid password");
+        }
+      }
+    });
+
+    if (!userExist) {
+      setemailErrorBullean(true);
+      setEmailError("Invalid email");
     }
   };
 
   return (
     <Formik
-      initialValues={{ name: "", email: "", password: "", verifyPassword: "" }}
+      initialValues={{ email: "", password: "" }}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
-        submitRegistration(values, resetForm);
+        submitValidation(values, resetForm);
         setSubmitting(false);
       }}
     >
       {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
         <form onSubmit={handleSubmit} style={styles.main}>
-          <TextField
-            id="outlined-basic"
-            label="Name"
-            variant="outlined"
-            type="name"
-            name="name"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.name}
-            required
-            sx={styles.input}
-          />
           {emailErrorBullean ? (
             <TextField
               error
@@ -158,46 +154,22 @@ export default function Form() {
               sx={styles.input}
             />
           )}
-          {passwordErrorBullean ? (
-            <TextField
-              error
-              id="outlined-basic"
-              label="Confirm password"
-              variant="outlined"
-              type="password"
-              name="verifyPassword"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.verifyPassword}
-              required
-              sx={styles.input}
-              helperText={passwordError}
-            />
-          ) : (
-            <TextField
-              id="outlined-basic"
-              label="Comfirm password"
-              variant="outlined"
-              type="password"
-              name="verifyPassword"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.verifyPassword}
-              required
-              sx={styles.input}
-            />
-          )}
           <Button
             variant="contained"
             type="submit"
             disabled={isSubmitting}
             sx={styles.button}
           >
-            Create Account
+            Log In
           </Button>
-          <Typography sx={styles.forgotPassword} onClick={() => navigate("/")}>
-            I already have an account
-          </Typography>
+          <Typography sx={styles.forgotPassword}>Forgot password?</Typography>
+          <Button
+            variant="outlined"
+            sx={styles.createAccountButton}
+            onClick={() => navigate("/registration")}
+          >
+            Create account
+          </Button>
         </form>
       )}
     </Formik>

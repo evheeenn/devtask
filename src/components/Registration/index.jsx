@@ -1,7 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
 import Landing from "./components/Landing";
-import "./index.css";
 import FormBox from "./components/FormBox";
 
 export default function Registration() {

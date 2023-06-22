@@ -5,12 +5,17 @@ import PersonIcon from '@mui/icons-material/Person';
 import HomeIcon from '@mui/icons-material/Home';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
+import { useNavigate } from "react-router-dom";
 
 export default function LabelBottomNavigation() {
+
+  const navigate = useNavigate()
+
   const [value, setValue] = React.useState("recents");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    navigate(`/${newValue}`)
   };
 
   const styles = {
@@ -31,12 +36,12 @@ export default function LabelBottomNavigation() {
     >
       <BottomNavigationAction
         label="Home"
-        value="home"
-        icon={<HomeIcon color="primary" />}
+        value="main"
+        icon={<HomeIcon />}
       />
       <BottomNavigationAction
         label="New"
-        value="new"
+        value="newProject"
         icon={<AddCircleIcon />}
       />
       <BottomNavigationAction

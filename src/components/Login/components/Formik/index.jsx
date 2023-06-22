@@ -72,6 +72,7 @@ export default function Form() {
           setPasswordErrorBullean(false);
           localStorage.setItem("user", JSON.stringify(el.id));
           dispatch(addUserAction(el));
+          navigate('/main')
           resetForm();
         } else {
           setPasswordErrorBullean(true);

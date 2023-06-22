@@ -1,9 +1,9 @@
 import React from "react";
 import { Box } from "@mui/material";
-import LabelBottomNavigation from "../BottomNav";
 import logo from "../../img/logo.png"
+import ProjectCreatorForm from "./Form";
 
-export default function Main() {
+export default function ProjectCreator() {
   const styles = {
     main: {
       width: "100%",
@@ -30,6 +30,7 @@ export default function Main() {
   return (
     <Box sx={styles.main}>
       <Box sx={styles.logo}></Box>
+      <ProjectCreatorForm/>
     </Box>
   );
 }

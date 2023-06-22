@@ -75,6 +75,7 @@ export default function Form() {
       const newUser = new User(values.name, values.email, values.password);
       await dispatch(registrationThunk(newUser));
       resetForm();
+      navigate('/main')
     }
   };
 

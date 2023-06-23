@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import Landing from "./components/Landing";
 import "./index.css";
 import FormBox from "./components/FormBox";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getUserThunk } from "../../store/actions";
 
 export default function Login() {
+
   const styles = {
     main: {
       width: "100%",

@@ -6,10 +6,13 @@ import HomeIcon from '@mui/icons-material/Home';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function LabelBottomNavigation() {
 
   const navigate = useNavigate()
+
+  const location = useLocation()
 
   const [value, setValue] = React.useState("recents");
 
@@ -36,23 +39,23 @@ export default function LabelBottomNavigation() {
     >
       <BottomNavigationAction
         label="Home"
-        value="main"
-        icon={<HomeIcon />}
+        value=""
+        icon={<HomeIcon sx={{color: location.pathname == '/' ? '#535bc8' : 'inherit'}}/>}
       />
       <BottomNavigationAction
         label="New"
         value="newProject"
-        icon={<AddCircleIcon />}
+        icon={<AddCircleIcon sx={{color: location.pathname == '/newProject' ? '#535bc8' : 'inherit'}}/>}
       />
       <BottomNavigationAction
         label="Done"
         value="done"
-        icon={<DoneAllIcon />}
+        icon={<DoneAllIcon sx={{color: location.pathname == '/done' ? '#535bc8' : 'inherit'}}/>}
       />
       <BottomNavigationAction
         label="Account"
         value="account"
-        icon={<PersonIcon />}
+        icon={<PersonIcon sx={{color: location.pathname == '/account' ? '#535bc8' : 'inherit'}}/>}
       />
     </BottomNavigation>
   );

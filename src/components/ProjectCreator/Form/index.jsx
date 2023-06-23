@@ -1,7 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import FormikProjectCreator from "./components/FormikProjectCreator";
+import LabelBottomNavigation from "../../BottomNav";
 
 export default function ProjectCreatorForm() {
+
   const styles = {
     main: {
       width: "53%",
@@ -9,7 +12,8 @@ export default function ProjectCreatorForm() {
       display: "flex",
       flexDirection: "column",
       margin: "73px auto 0 auto",
-      "@media (max-width: 850px)": {
+      "@media (min-width: 600px) and (max-width: 850px)": {
+        marginTop: '173px',
         width: "70%",
       },
       "@media (max-width: 500px)": {
@@ -26,7 +30,7 @@ export default function ProjectCreatorForm() {
       },
       "@media (max-width: 500px)": {
         fontSize: "27px",
-        margin: "17px 0 0 17px",
+        margin: "27px 0 0 0",
       },
     },
 
@@ -34,7 +38,7 @@ export default function ProjectCreatorForm() {
       color: "#4a4c6f",
       "@media (max-width: 500px)": {
         fontSize: '12px',
-        margin: "7px 0 0 17px",
+        margin: "7px 0 0 0px",
       },
       "@media (max-width: 380px)": {
         fontSize: '12px',
@@ -51,6 +55,8 @@ export default function ProjectCreatorForm() {
       <Typography variant="body1" sx={styles.hint}>
         Use this constructor to create and customize your project planner
       </Typography>
+      <FormikProjectCreator/>
+      <LabelBottomNavigation color={"#a9acdf"} />
     </Box>
   );
 }

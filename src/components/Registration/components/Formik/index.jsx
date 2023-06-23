@@ -75,7 +75,7 @@ export default function Form() {
       const newUser = new User(values.name, values.email, values.password);
       await dispatch(registrationThunk(newUser));
       resetForm();
-      navigate('/main')
+      navigate('/')
     }
   };
 
@@ -196,7 +196,7 @@ export default function Form() {
           >
             Create Account
           </Button>
-          <Typography sx={styles.forgotPassword} onClick={() => navigate("/")}>
+          <Typography sx={styles.forgotPassword} onClick={() => navigate("/login")}>
             I already have an account
           </Typography>
         </form>

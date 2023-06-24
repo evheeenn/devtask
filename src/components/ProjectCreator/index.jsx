@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import logo from "../../img/logo.png"
+import logo from "../../img/logo.png";
 import ProjectCreatorForm from "./Form";
 
 export default function ProjectCreator() {
@@ -30,7 +30,7 @@ export default function ProjectCreator() {
   return (
     <Box sx={styles.main}>
       <Box sx={styles.logo}></Box>
-      <ProjectCreatorForm/>
+      <ProjectCreatorForm />
     </Box>
   );
 }

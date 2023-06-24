@@ -11,17 +11,16 @@ import { getUserThunk } from "./store/actions";
 import { useLocation } from "react-router-dom";
 
 function App() {
-
-  const dispatch = useDispatch()
-  const localUserID = JSON.parse(localStorage.getItem("user"))
+  const dispatch = useDispatch();
+  const localUserID = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    if(localUserID){
-      dispatch(getUserThunk(localUserID))
+    if (localUserID) {
+      dispatch(getUserThunk(localUserID));
     }
-  }, [])
-  
-  const user = useSelector((store) => store.user)
+  }, []);
+
+  const user = useSelector((store) => store.user);
 
   const userBullean = localUserID ? true : false;
 
@@ -30,18 +29,20 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={
-          <PrivateRoute isAuth={userBullean}>
-            <Main />
-          </PrivateRoute>
-        } />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute isAuth={userBullean}>
+              <Main />
+            </PrivateRoute>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/newProject" element={<ProjectCreator />} />
       </Routes>
     </>
   );
-  
 }
 
 export default App;

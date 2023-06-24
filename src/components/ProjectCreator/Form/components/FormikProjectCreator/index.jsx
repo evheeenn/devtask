@@ -8,11 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Project } from "../../../../../classes/classes";
 import { updateUserThunk } from "../../../../../store/actions";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 export default function FormikProjectCreator() {
-
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const user = useSelector((store) => store.user);
 
@@ -27,8 +27,8 @@ export default function FormikProjectCreator() {
 
   const deadlineBulleanValue = () => {
     setDeadlineBullean(!deadlineBullean);
-    if(deadlineBullean == false){
-      setSelectedDate(null)
+    if (deadlineBullean == false) {
+      setSelectedDate(null);
     }
   };
 
@@ -75,7 +75,11 @@ export default function FormikProjectCreator() {
     },
 
     deadlineError: {
-      display: !deadlineBullean ? 'none' : deadlineError.length > 0 ? "inherit" : "none",
+      display: !deadlineBullean
+        ? "none"
+        : deadlineError.length > 0
+        ? "inherit"
+        : "none",
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
       fontWeight: 400,
       fontSize: "0.75rem",
@@ -100,19 +104,26 @@ export default function FormikProjectCreator() {
     setDescriptionError("");
     setDeadlineError("");
     const nameExist = user.projects.find((item) => item.name === values.name);
-    const today = new Date();
+    const today = dayjs();
 
-    if(!values.name.includes(' ')){
+    if (!values.name.includes(" ")) {
       if (values.name.length <= 27) {
         if (!nameExist) {
           if (values.description.length <= 150) {
             if (deadlineBullean) {
               if (selectedDate !== null) {
                 if (selectedDate && selectedDate.isAfter(today, "day")) {
-                  const newProject = new Project(values.name, values.description, sprints, deadlineBullean, selectedDate, today)
-                  user.projects.push(newProject)
-                  dispatch(updateUserThunk(user))
-                  navigate('/')
+                  const newProject = new Project(
+                    values.name,
+                    values.description,
+                    sprints,
+                    deadlineBullean,
+                    selectedDate.format("DD-MM-YYYY HH:mm"),
+                    today.format("DD-MM-YYYY HH:mm")
+                  );
+                  user.projects.push(newProject);
+                  dispatch(updateUserThunk(user));
+                  navigate("/");
                 } else {
                   setDeadlineError("Invalid deadline");
                 }
@@ -120,10 +131,17 @@ export default function FormikProjectCreator() {
                 setDeadlineError("Please, select deadline");
               }
             } else {
-              const newProject = new Project(values.name, values.description, sprints, deadlineBullean, selectedDate, today)
-              user.projects.push(newProject)
-              dispatch(updateUserThunk(user))
-              navigate('/')
+              const newProject = new Project(
+                values.name,
+                values.description,
+                sprints,
+                deadlineBullean,
+                selectedDate,
+                today.format("DD-MM-YYYY HH:mm")
+              );
+              user.projects.push(newProject);
+              dispatch(updateUserThunk(user));
+              navigate("/");
             }
           } else {
             setDescriptionError("No more than 150 letters");
@@ -131,9 +149,9 @@ export default function FormikProjectCreator() {
         } else {
           setNameError(`Project with name ${values.name} already exists`);
         }
-      }  else {
+      } else {
         setNameError("Not more than 25 letters");
-      } 
+      }
     } else {
       setNameError("Space cannot be used in the name");
     }

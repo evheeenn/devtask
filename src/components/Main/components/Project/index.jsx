@@ -4,6 +4,7 @@ import { Progress } from "antd";
 import DeadlineBar from "./components/DeadlineProgressBar";
 import ProgressBar from "./components/ProgressBar";
 import dayjs from "dayjs";
+import { calculateDeadline } from "../../../../Math";
 
 export default function Project({ el }) {
   const styles = {
@@ -56,6 +57,11 @@ export default function Project({ el }) {
   const [progress, setProgress] = useState();
   const count = el.sprintsBullean ? "Sprints:" : "Tasks: ";
 
+  const startDate = el.date;
+  const deadline = el.deadline;
+
+  const deadlineValue = calculateDeadline(startDate, deadline);
+
   return (
     <Box sx={styles.main}>
       <Box sx={styles.headerWrapper}>
@@ -69,10 +75,10 @@ export default function Project({ el }) {
         </Typography>
       </Box>
       <Typography sx={{ margin: "7px 0 0 27px", color: "#9ea5ff" }}>
-        {dayjs(el.date).format("DD.MM.YYYY")}
+        {el.date.replace(/-/g, ".")}
       </Typography>
       {el.deadlineBullean ? (
-        <DeadlineBar value={80} style={styles.deadline} />
+        <DeadlineBar value={deadlineValue} style={styles.deadline} />
       ) : null}
       {!el.sprintsBullean ? (
         <ProgressBar value={50} style={styles.progress} />

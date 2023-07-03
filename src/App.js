@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getUserThunk } from "./store/actions";
 import { useLocation } from "react-router-dom";
+import ProjectPage from "./components/ProjectPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/newProject" element={<ProjectCreator />} />
+        <Route path="/project/:name" element={<ProjectPage/>}/>
       </Routes>
     </>
   );

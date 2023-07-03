@@ -14,6 +14,9 @@ export class Project {
     sprintsBullean,
     deadlineBullean,
     deadline,
+    textColor,
+    backgroundColor,
+    middleColor,
     date
   ) {
     this.name = name;
@@ -24,6 +27,9 @@ export class Project {
     this.deadlineBullean = deadlineBullean;
     this.deadline = deadline;
     this.completed = false;
+    this.textColor = textColor;
+    this.backgroundColor = backgroundColor;
+    this.middleColor = middleColor;
     this.date = date;
   }
 }

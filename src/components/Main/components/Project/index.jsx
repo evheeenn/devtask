@@ -5,13 +5,18 @@ import DeadlineBar from "./components/DeadlineProgressBar";
 import ProgressBar from "./components/ProgressBar";
 import dayjs from "dayjs";
 import { calculateDeadline } from "../../../../Math";
+import { useNavigate } from "react-router-dom";
+import { mainTheme } from "../../../../colorThemes/colorBase";
 
 export default function Project({ el }) {
+
+  const navigate = useNavigate()
+
   const styles = {
     main: {
       width: "378px",
       height: "200px",
-      background: "#535bc8",
+      background: mainTheme.projectBlockColor,
       margin: "17px 17px 7px 17px",
       borderRadius: "12px",
       cursor: "pointer",
@@ -24,12 +29,12 @@ export default function Project({ el }) {
     },
 
     count: {
-      color: "#9ea5ff",
+      color: mainTheme.textColor,
       fontSize: "17px",
     },
 
     h1: {
-      color: "white",
+      color: mainTheme.headlineColor,
       fontSize: "27px",
       fontWeight: 600,
     },
@@ -53,8 +58,7 @@ export default function Project({ el }) {
       margin: el.deadlineBullean ? "26px auto 0 30px" : "73px auto 0 30px",
     },
   };
-
-  const [progress, setProgress] = useState();
+  
   const count = el.sprintsBullean ? "Sprints:" : "Tasks: ";
 
   const startDate = el.date;
@@ -62,8 +66,12 @@ export default function Project({ el }) {
 
   const deadlineValue = calculateDeadline(startDate, deadline);
 
+  const navigateToProjectPage = () => {
+    navigate(`/project/${el.name}`)
+  }
+
   return (
-    <Box sx={styles.main}>
+    <Box sx={styles.main} onClick={navigateToProjectPage}>
       <Box sx={styles.headerWrapper}>
         <Typography variant="h1" sx={styles.h1}>
           {el.name}
@@ -74,7 +82,7 @@ export default function Project({ el }) {
             : `${count} ${el.tasks.length}`}
         </Typography>
       </Box>
-      <Typography sx={{ margin: "7px 0 0 27px", color: "#9ea5ff" }}>
+      <Typography sx={{ margin: "7px 0 0 27px", color: mainTheme.textColor }}>
         {el.date.replace(/-/g, ".")}
       </Typography>
       {el.deadlineBullean ? (

@@ -15,5 +15,7 @@ export function calculateDeadline(
 
   const progressPercentage = (elapsedHours / totalHours) * 100;
 
-  return progressPercentage.toFixed(2);
+  const percentControl = progressPercentage >= 100 ? 100 : progressPercentage
+
+  return percentControl.toFixed(2);
 }

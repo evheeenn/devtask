@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Formik } from "formik";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -9,6 +9,7 @@ import { Project } from "../../../../../classes/classes";
 import { updateUserThunk } from "../../../../../store/actions";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import { getRandomColor } from "../../../../../colorThemes/getRandomColor";
 
 export default function FormikProjectCreator() {
   const dispatch = useDispatch();
@@ -105,11 +106,12 @@ export default function FormikProjectCreator() {
     setDeadlineError("");
     const nameExist = user.projects.find((item) => item.name === values.name);
     const today = dayjs();
+    const colorCombination = getRandomColor();
 
     if (!values.name.includes(" ")) {
-      if (values.name.length <= 27) {
+      if (values.name.length <= 15) {
         if (!nameExist) {
-          if (values.description.length <= 150) {
+          if (values.description.length <= 100) {
             if (deadlineBullean) {
               if (selectedDate !== null) {
                 if (selectedDate && selectedDate.isAfter(today, "day")) {
@@ -119,6 +121,9 @@ export default function FormikProjectCreator() {
                     sprints,
                     deadlineBullean,
                     selectedDate.format("DD-MM-YYYY HH:mm"),
+                    colorCombination.text,
+                    colorCombination.background,
+                    colorCombination.middleColor,
                     today.format("DD-MM-YYYY HH:mm")
                   );
                   user.projects.push(newProject);
@@ -137,6 +142,9 @@ export default function FormikProjectCreator() {
                 sprints,
                 deadlineBullean,
                 selectedDate,
+                colorCombination.text,
+                colorCombination.background,
+                colorCombination.middleColor,
                 today.format("DD-MM-YYYY HH:mm")
               );
               user.projects.push(newProject);
@@ -144,13 +152,13 @@ export default function FormikProjectCreator() {
               navigate("/");
             }
           } else {
-            setDescriptionError("No more than 150 letters");
+            setDescriptionError("No more than 100 letters");
           }
         } else {
           setNameError(`Project with name ${values.name} already exists`);
         }
       } else {
-        setNameError("Not more than 25 letters");
+        setNameError("Not more than 15 letters");
       }
     } else {
       setNameError("Space cannot be used in the name");

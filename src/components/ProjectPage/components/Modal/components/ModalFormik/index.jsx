@@ -78,20 +78,20 @@ export default function FormikProjectCreator({ project, onPush }) {
     const colorCombination = getRandomColor();
     const selectedDateUnix = dayjs(selectedDate).valueOf(); // Перетворення в Unix Timestamp
     const projectDeadlineUnix = dayjs(project.deadline).valueOf();
-    const selectedDayJS = dayjs(selectedDate);
     const projectDeadlineFormatted = dayjs(
       project.deadline,
       "DD-MM-YYYY HH:mm"
     );
-
-    if (selectedDate.isBefore(projectDeadlineFormatted)) {
-      console.log(selectedDateUnix, projectDeadlineUnix);
-      if (!values.name.includes(" ")) {
-        if (values.name.length <= 15) {
-          if (!nameExist) {
-            if (values.description.length <= 25) {
-              if (selectedDate !== null) {
-                if (selectedDate && dayjs(selectedDate).isAfter(today)) {
+    if (!values.name.includes(" ")) {
+      if (values.name.length <= 15) {
+        if (!nameExist) {
+          if (values.description.length <= 25) {
+            if (selectedDate !== null) {
+              if (selectedDate && dayjs(selectedDate).isAfter(today)) {
+                if (
+                  selectedDate &&
+                  selectedDate.isBefore(projectDeadlineFormatted)
+                ) {
                   const newSprint = {
                     name: values.name,
                     description: values.description,
@@ -108,27 +108,27 @@ export default function FormikProjectCreator({ project, onPush }) {
                     }
                   });
                 } else {
-                  setDeadlineError("Invalid deadline");
+                  setDeadlineError(
+                    "The sprint deadline cannot end later than the project deadline!"
+                  );
                 }
               } else {
-                setDeadlineError("Please, select deadline");
+                setDeadlineError("Invalid deadline");
               }
             } else {
-              setDescriptionError("No more than 25 letters");
+              setDeadlineError("Please, select deadline");
             }
           } else {
-            setNameError(`Sprint with name ${values.name} already exists`);
+            setDescriptionError("No more than 25 letters");
           }
         } else {
-          setNameError("Not more than 15 letters");
+          setNameError(`Sprint with name ${values.name} already exists`);
         }
       } else {
-        setNameError("Space cannot be used in the name");
+        setNameError("Not more than 15 letters");
       }
     } else {
-      setDeadlineError(
-        "The sprint deadline cannot end later than the project deadline!"
-      );
+      setNameError("Space cannot be used in the name");
     }
   };
 
@@ -238,18 +238,6 @@ export default function FormikProjectCreator({ project, onPush }) {
                 />
               )}
             </Box>
-            {/* <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography variant="body1" className={classes.switchLabel}>
-                Sprints
-              </Typography>
-              <Switch onClick={spritsValue} sx={{ margin: "7px 0 0 0" }} />
-            </Box>
-            <Typography
-              variant="body1"
-              sx={{ fontSize: "12px", color: SEROBUROMALINOVII }}
-            >
-              * For large collective projects
-            </Typography> */}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 onChange={handleDateChange}

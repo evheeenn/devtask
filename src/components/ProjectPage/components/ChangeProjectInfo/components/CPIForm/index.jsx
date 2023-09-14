@@ -88,8 +88,6 @@ export default function FormikProjectCreator({ project, setOpen, setEdit }) {
     setNewDeadlineSwitch(!newDeadlineSwitch);
   };
 
-  const deadlineWillDeleteBullean = deadlineDelete ? false : true;
-
   const [nameError, setNameError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [deadlineError, setDeadlineError] = useState("");
@@ -113,6 +111,8 @@ export default function FormikProjectCreator({ project, setOpen, setEdit }) {
                 thisProject.description = description;
                 thisProject.deadlineBullean = deadlineDelete
                   ? false
+                  : project.deadline !== false
+                  ? true
                   : newDeadline == null
                   ? false
                   : true;

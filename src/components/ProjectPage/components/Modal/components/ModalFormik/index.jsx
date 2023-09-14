@@ -5,17 +5,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box, Switch, TextField, Typography, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUserThunk } from "../../../../../store/actions";
+import { updateUserThunk } from "../../../../../../store/actions";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import { getRandomColor } from "../../../../../colorThemes/getRandomColor";
-import {
-  ERROR_RED,
-  MAIN_BLUE,
-  SEROBUROMALINOVII,
-} from "../../../../../constants/styles";
+import { getRandomColor } from "../../../../../../colorThemes/getRandomColor";
+import { ERROR_RED, MAIN_BLUE } from "../../../../../../constants/styles";
 import { createUseStyles } from "react-jss";
-import { v4 } from "uuid";
 
 const useStyles = createUseStyles({
   form: {
@@ -51,7 +46,7 @@ const useStyles = createUseStyles({
   },
 });
 
-export default function FormikProjectCreator() {
+export default function FormikProjectCreator({ project, onPush }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -66,13 +61,6 @@ export default function FormikProjectCreator() {
   const [deadlineBullean, setDeadlineBullean] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
-  const deadlineBulleanValue = () => {
-    setDeadlineBullean(!deadlineBullean);
-    if (deadlineBullean == false) {
-      setSelectedDate(null);
-    }
-  };
-
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
@@ -85,33 +73,40 @@ export default function FormikProjectCreator() {
     setNameError("");
     setDescriptionError("");
     setDeadlineError("");
-    const nameExist = user.projects.find((item) => item.name === values.name);
+    const nameExist = project.sprints.find((item) => item.name === values.name);
     const today = dayjs();
     const colorCombination = getRandomColor();
+    const selectedDateUnix = dayjs(selectedDate).valueOf(); // Перетворення в Unix Timestamp
+    const projectDeadlineUnix = dayjs(project.deadline).valueOf();
+    const selectedDayJS = dayjs(selectedDate);
+    const projectDeadlineFormatted = dayjs(
+      project.deadline,
+      "DD-MM-YYYY HH:mm"
+    );
 
-    if (!values.name.includes(" ")) {
-      if (values.name.length <= 15) {
-        if (!nameExist) {
-          if (values.description.length <= 25) {
-            if (deadlineBullean) {
+    if (selectedDate.isBefore(projectDeadlineFormatted)) {
+      console.log(selectedDateUnix, projectDeadlineUnix);
+      if (!values.name.includes(" ")) {
+        if (values.name.length <= 15) {
+          if (!nameExist) {
+            if (values.description.length <= 25) {
               if (selectedDate !== null) {
-                if (selectedDate && selectedDate.isAfter(today, "day")) {
-                  const newProject = {
-                    id: v4(),
+                if (selectedDate && dayjs(selectedDate).isAfter(today)) {
+                  const newSprint = {
                     name: values.name,
                     description: values.description,
-                    sprints: [],
-                    deadlineBullean: deadlineBullean,
+                    tasks: [],
                     deadline: selectedDate.format("DD-MM-YYYY HH:mm"),
-                    completed: false,
-                    textColor: colorCombination.text,
-                    backgroundColor: colorCombination.background,
-                    middleColor: colorCombination.middleColor,
+                    status: "",
                     date: today.format("DD-MM-YYYY HH:mm"),
                   };
-                  user.projects.push(newProject);
-                  dispatch(updateUserThunk(user));
-                  navigate("/");
+                  user.projects.forEach((el) => {
+                    if (el.id === project.id) {
+                      el.sprints.push(newSprint);
+                      dispatch(updateUserThunk(user));
+                      onPush();
+                    }
+                  });
                 } else {
                   setDeadlineError("Invalid deadline");
                 }
@@ -119,32 +114,21 @@ export default function FormikProjectCreator() {
                 setDeadlineError("Please, select deadline");
               }
             } else {
-              const newProject = {
-                name: values.name,
-                description: values.description,
-                sprints: [],
-                deadlineBullean: deadlineBullean,
-                completed: false,
-                textColor: colorCombination.text,
-                backgroundColor: colorCombination.background,
-                middleColor: colorCombination.middleColor,
-                date: today.format("DD-MM-YYYY HH:mm"),
-              };
-              user.projects.push(newProject);
-              dispatch(updateUserThunk(user));
-              navigate("/");
+              setDescriptionError("No more than 25 letters");
             }
           } else {
-            setDescriptionError("No more than 25 letters");
+            setNameError(`Sprint with name ${values.name} already exists`);
           }
         } else {
-          setNameError(`Project with name ${values.name} already exists`);
+          setNameError("Not more than 15 letters");
         }
       } else {
-        setNameError("Not more than 15 letters");
+        setNameError("Space cannot be used in the name");
       }
     } else {
-      setNameError("Space cannot be used in the name");
+      setDeadlineError(
+        "The sprint deadline cannot end later than the project deadline!"
+      );
     }
   };
 
@@ -154,15 +138,9 @@ export default function FormikProjectCreator() {
     deadline: {
       width: "37%",
       margin: "8px 0 8px 0",
-      display: deadlineBullean ? "flex" : "none",
     },
 
     deadlineError: {
-      display: !deadlineBullean
-        ? "none"
-        : deadlineError.length > 0
-        ? "inherit"
-        : "none",
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
       fontWeight: 400,
       fontSize: "0.75rem",
@@ -205,7 +183,7 @@ export default function FormikProjectCreator() {
                 <TextField
                   className={classes.name}
                   id="outlined-basic"
-                  label="Project Name"
+                  label="Sprint Name"
                   variant="outlined"
                   type="name"
                   name="name"
@@ -220,7 +198,7 @@ export default function FormikProjectCreator() {
                 <TextField
                   className={classes.name}
                   id="outlined-basic"
-                  label="Project Name"
+                  label="Sprint Name"
                   variant="outlined"
                   type="name"
                   name="name"
@@ -272,15 +250,6 @@ export default function FormikProjectCreator() {
             >
               * For large collective projects
             </Typography> */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography variant="body1" className={classes.switchLabel}>
-                Deadline
-              </Typography>
-              <Switch
-                onClick={deadlineBulleanValue}
-                sx={{ margin: "7px 0 0 0" }}
-              />
-            </Box>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 onChange={handleDateChange}
@@ -294,10 +263,9 @@ export default function FormikProjectCreator() {
             <Button
               variant="contained"
               type="submit"
-              disabled={isSubmitting}
               className={classes.submitButton}
             >
-              Create new project
+              Create new sprint
             </Button>
           </form>
         )}

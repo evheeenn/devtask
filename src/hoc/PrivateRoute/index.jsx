@@ -5,5 +5,5 @@ export default function PrivateRoute({ isAuth, children }) {
   if (!isAuth) {
     return <Navigate to={"/login"} />;
   }
-  return children
+  return children;
 }

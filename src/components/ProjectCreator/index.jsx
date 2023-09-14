@@ -1,23 +1,27 @@
 import React from "react";
 import { Box } from "@mui/material";
-import logo from "../../img/logo.png";
 import ProjectCreatorForm from "./Form";
-import Logo from "../Logo";
+import Logo from "../../common/components/Logo";
+import { MAIN_BACKGROUND_COLOR } from "../../constants/styles";
+import { createUseStyles } from "react-jss";
+
+const useStyles = createUseStyles({
+  main: {
+    width: "100%",
+    height: "100vh",
+    display: "flex",
+    background: MAIN_BACKGROUND_COLOR,
+    margin: 0,
+    padding: 0,
+  },
+});
 
 export default function ProjectCreator() {
-  const styles = {
-    main: {
-      width: "100%",
-      height: "100vh",
-      display: "flex",
-      background: "#D3D5F0",
-      margin: 0,
-      padding: 0,
-    },
-  };
+  const classes = useStyles();
+
   return (
-    <Box sx={styles.main}>
-      <Logo/>
+    <Box className={classes.main}>
+      <Logo />
       <ProjectCreatorForm />
     </Box>
   );

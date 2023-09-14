@@ -3,8 +3,8 @@ import Registration from "./components/Registration";
 import Login from "./components/Login";
 import Main from "./components/Main";
 import ProjectCreator from "./components/ProjectCreator";
-import LabelBottomNavigation from "./components/BottomNav";
-import PrivateRoute from "./components/PrivateRoute";
+import LabelBottomNavigation from "./common/components/BottomNav";
+import PrivateRoute from "./hoc/PrivateRoute";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getUserThunk } from "./store/actions";
@@ -41,8 +41,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/newProject" element={<ProjectCreator />} />
-        <Route path="/project/:name" element={<ProjectPage/>}/>
+        <Route path="/project/:id" element={<ProjectPage />} />
       </Routes>
+      <LabelBottomNavigation />
     </>
   );
 }

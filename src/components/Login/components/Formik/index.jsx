@@ -8,44 +8,48 @@ import {
   getUsersForValidationThunk,
 } from "../../../../store/actions";
 import { useNavigate } from "react-router-dom";
+import { FORM_BLUE } from "../../../../constants/styles";
+import { createUseStyles } from "react-jss";
+
+const useStyles = createUseStyles({
+  main: {
+    display: "flex",
+    flexDirection: "column",
+    padding: "23px 10px 0 10px",
+  },
+
+  input: {
+    width: "90%",
+    margin: "23px auto 0 auto",
+  },
+
+  button: {
+    width: "90%",
+    height: "37px",
+    margin: "27px auto 0 auto",
+    background: FORM_BLUE,
+    "&:hover": {
+      background: FORM_BLUE,
+    },
+  },
+
+  forgotPassword: {
+    fontSize: "14px",
+    color: FORM_BLUE,
+    margin: "17px auto 0 auto",
+    cursor: "pointer",
+  },
+
+  createAccountButton: {
+    width: "70%",
+    height: "37px",
+    margin: "23px auto 0 auto",
+    color: FORM_BLUE,
+  },
+});
 
 export default function Form() {
-  const styles = {
-    main: {
-      display: "flex",
-      flexDirection: "column",
-      padding: "23px 10px 0 10px",
-    },
-
-    input: {
-      width: "90%",
-      margin: "23px auto 0 auto",
-    },
-
-    button: {
-      width: "90%",
-      height: "37px",
-      margin: "27px auto 0 auto",
-      background: "#3F4BF2",
-      "&:hover": {
-        background: "#3F4BF2",
-      },
-    },
-
-    forgotPassword: {
-      fontSize: "14px",
-      color: "#3F4BF2",
-      margin: "17px auto 0 auto",
-      cursor: "pointer",
-    },
-
-    createAccountButton: {
-      width: "70%",
-      height: "37px",
-      margin: "23px auto 0 auto",
-      color: "#3F4BF2",
-    },
-  };
+  const classes = useStyles();
 
   const userCheck = useSelector((state) => state.usersForValidation);
   const dispatch = useDispatch();
@@ -72,7 +76,7 @@ export default function Form() {
           setPasswordErrorBullean(false);
           localStorage.setItem("user", JSON.stringify(el.id));
           dispatch(addUserAction(el));
-          navigate('/')
+          navigate("/");
           resetForm();
         } else {
           setPasswordErrorBullean(true);
@@ -96,7 +100,7 @@ export default function Form() {
       }}
     >
       {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
-        <form onSubmit={handleSubmit} style={styles.main}>
+        <form onSubmit={handleSubmit} className={classes.main}>
           {emailErrorBullean ? (
             <TextField
               error
@@ -109,7 +113,7 @@ export default function Form() {
               onBlur={handleBlur}
               value={values.email}
               required
-              sx={styles.input}
+              className={classes.input}
               helperText={emailError}
             />
           ) : (
@@ -123,7 +127,7 @@ export default function Form() {
               onBlur={handleBlur}
               value={values.email}
               required
-              sx={styles.input}
+              className={classes.input}
             />
           )}
           {passwordErrorBullean ? (
@@ -138,7 +142,7 @@ export default function Form() {
               onBlur={handleBlur}
               value={values.password}
               required
-              sx={styles.input}
+              className={classes.input}
               helperText={passwordError}
             />
           ) : (
@@ -152,21 +156,23 @@ export default function Form() {
               onBlur={handleBlur}
               value={values.password}
               required
-              sx={styles.input}
+              className={classes.input}
             />
           )}
           <Button
             variant="contained"
             type="submit"
             disabled={isSubmitting}
-            sx={styles.button}
+            className={classes.button}
           >
             Log In
           </Button>
-          <Typography sx={styles.forgotPassword}>Forgot password?</Typography>
+          <Typography className={classes.forgotPassword}>
+            Forgot password?
+          </Typography>
           <Button
             variant="outlined"
-            sx={styles.createAccountButton}
+            className={classes.createAccountButton}
             onClick={() => navigate("/registration")}
           >
             Create account

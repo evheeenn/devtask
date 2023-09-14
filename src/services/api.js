@@ -1,5 +1,4 @@
 export const API = {
-
   getUser: async (id) => {
     return await fetch(
       `https://6442d57333997d3ef91aa550.mockapi.io/api/mindboard/devTaskUsers/${id}`
@@ -27,7 +26,7 @@ export const API = {
     return resGet;
   },
 
-  updateUser: async(newUser) => {
+  updateUser: async (newUser) => {
     const response = await fetch(
       `https://6442d57333997d3ef91aa550.mockapi.io/api/mindboard/devTaskUsers/${newUser.id}`,
       {
@@ -35,9 +34,8 @@ export const API = {
         headers: { "content-type": "application/json; charset=utf-8" },
         body: JSON.stringify(newUser),
       }
-    ).then(res => res.json())
+    ).then((res) => res.json());
 
-    return response
-  }
-
+    return response;
+  },
 };

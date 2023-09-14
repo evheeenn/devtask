@@ -1,11 +1,10 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 
-const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 8,
   borderRadius: 5,
   [`&.${linearProgressClasses.colorPrimary}`]: {
@@ -14,12 +13,11 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
   },
   [`& .${linearProgressClasses.bar}`]: {
     borderRadius: 5,
-    backgroundColor:
-      value < 50 ? "#46b051" : value < 80 ? "#b0ae46" : "#b84954",
+    backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
   },
 }));
 
-export default function DeadlineBar({ value, style }) {
+export default function ProgressBar({ value, style }) {
   return (
     <BorderLinearProgress variant="determinate" value={value} sx={style} />
   );

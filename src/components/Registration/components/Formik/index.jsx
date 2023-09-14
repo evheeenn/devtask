@@ -7,47 +7,49 @@ import {
   getUsersForValidationThunk,
   registrationThunk,
 } from "../../../../store/actions";
-import { User } from "../../../../classes/classes";
 import { useNavigate } from "react-router-dom";
+import { FORM_BLUE } from "../../../../constants/styles";
+import { createUseStyles } from "react-jss";
+
+const useStyles = createUseStyles({
+  main: {
+    display: "flex",
+    flexDirection: "column",
+    padding: "23px 10px 0 10px",
+  },
+
+  input: {
+    width: "90%",
+    margin: "23px auto 0 auto",
+  },
+
+  button: {
+    width: "90%",
+    height: "37px",
+    margin: "27px auto 0 auto",
+    background: FORM_BLUE,
+    "&:hover": {
+      background: FORM_BLUE,
+    },
+  },
+
+  forgotPassword: {
+    fontSize: "14px",
+    color: FORM_BLUE,
+    margin: "14px auto 0 auto",
+    cursor: "pointer",
+  },
+
+  createAccountButton: {
+    width: "70%",
+    height: "37px",
+    margin: "27px auto 0 auto",
+    color: FORM_BLUE,
+  },
+});
 
 export default function Form() {
-  const styles = {
-    main: {
-      display: "flex",
-      flexDirection: "column",
-      padding: "23px 10px 0 10px",
-    },
-
-    input: {
-      width: "90%",
-      margin: "23px auto 0 auto",
-    },
-
-    button: {
-      width: "90%",
-      height: "37px",
-      margin: "27px auto 0 auto",
-      background: "#3F4BF2",
-      "&:hover": {
-        background: "#3F4BF2",
-      },
-    },
-
-    forgotPassword: {
-      fontSize: "14px",
-      color: "#3F4BF2",
-      margin: "14px auto 0 auto",
-      cursor: "pointer",
-    },
-
-    createAccountButton: {
-      width: "70%",
-      height: "37px",
-      margin: "27px auto 0 auto",
-      color: "#3F4BF2",
-    },
-  };
-
+  const classes = useStyles();
   const userCheck = useSelector((state) => state.usersForValidation);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -72,10 +74,15 @@ export default function Form() {
       setPasswordError("Passwords does not match.");
       setPasswordErrorBullean(true);
     } else {
-      const newUser = new User(values.name, values.email, values.password);
+      const newUser = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        projects: [],
+      };
       await dispatch(registrationThunk(newUser));
       resetForm();
-      navigate('/')
+      navigate("/");
     }
   };
 
@@ -88,7 +95,7 @@ export default function Form() {
       }}
     >
       {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
-        <form onSubmit={handleSubmit} style={styles.main}>
+        <form onSubmit={handleSubmit} className={classes.main}>
           <TextField
             id="outlined-basic"
             label="Name"
@@ -99,7 +106,7 @@ export default function Form() {
             onBlur={handleBlur}
             value={values.name}
             required
-            sx={styles.input}
+            className={classes.input}
           />
           {emailErrorBullean ? (
             <TextField
@@ -113,7 +120,7 @@ export default function Form() {
               onBlur={handleBlur}
               value={values.email}
               required
-              sx={styles.input}
+              className={classes.input}
               helperText={emailError}
             />
           ) : (
@@ -127,7 +134,7 @@ export default function Form() {
               onBlur={handleBlur}
               value={values.email}
               required
-              sx={styles.input}
+              className={classes.input}
             />
           )}
           {passwordErrorBullean ? (
@@ -142,7 +149,7 @@ export default function Form() {
               onBlur={handleBlur}
               value={values.password}
               required
-              sx={styles.input}
+              className={classes.input}
               helperText={passwordError}
             />
           ) : (
@@ -156,7 +163,7 @@ export default function Form() {
               onBlur={handleBlur}
               value={values.password}
               required
-              sx={styles.input}
+              className={classes.input}
             />
           )}
           {passwordErrorBullean ? (
@@ -171,7 +178,7 @@ export default function Form() {
               onBlur={handleBlur}
               value={values.verifyPassword}
               required
-              sx={styles.input}
+              className={classes.input}
               helperText={passwordError}
             />
           ) : (
@@ -185,18 +192,21 @@ export default function Form() {
               onBlur={handleBlur}
               value={values.verifyPassword}
               required
-              sx={styles.input}
+              className={classes.input}
             />
           )}
           <Button
             variant="contained"
             type="submit"
             disabled={isSubmitting}
-            sx={styles.button}
+            className={classes.button}
           >
             Create Account
           </Button>
-          <Typography sx={styles.forgotPassword} onClick={() => navigate("/login")}>
+          <Typography
+            className={classes.forgotPassword}
+            onClick={() => navigate("/login")}
+          >
             I already have an account
           </Typography>
         </form>
